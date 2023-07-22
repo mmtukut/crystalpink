@@ -17,8 +17,8 @@ require("three/examples/js/postprocessing/UnrealBloomPass.js");
 require("three/examples/js/shaders/LuminosityHighPassShader.js");
 require("three/examples/js/shaders/CopyShader.js");
 
-// const Stats = require("stats-js");
-// const { GUI } = require("dat.gui");
+const Stats = require("stats-js");
+const { GUI } = require("dat.gui");
 
 const settings = {
   animate: true,
@@ -27,10 +27,9 @@ const settings = {
 };
 
 const sketch = ({ context, canvas, width, height }) => {
-  // const stats = new Stats();
-  // document.body.appendChild(stats.dom);
-  // const gui = new GUI();
-
+  const stats = new Stats();
+  document.body.appendChild(stats.dom);
+  const gui = new GUI();
 
   const options = {
     enableSwoopingCamera: false,
@@ -198,9 +197,10 @@ loader.load('/src/gs.glb', function (gltf) {
   });
   scene.add(model);
 });
-   // GUI
+ // GUI
+  // ---
 
-  /** gui.add(options, "enableSwoopingCamera").onChange((val) => {
+  gui.add(options, "enableSwoopingCamera").onChange((val) => {
     controls.enabled = !val;
     controls.reset();
   });
@@ -257,13 +257,13 @@ loader.load('/src/gs.glb', function (gltf) {
     normalMapTexture.repeat.set(val, val);
   });
 
-  // gui.addColor(options, "attenuationTint").onChange((val) => {
-  //   material.attenuationTint.set(val);
-  // });
+  gui.addColor(options, "attenuationTint").onChange((val) => {
+  material.attenuationTint.set(val);
+  });
 
-  // gui.add(options, "attenuationDistance", 0, 1, 0.01).onChange((val) => {
-  //   material.attenuationDistance = val;
-  // });
+  gui.add(options, "attenuationDistance", 0, 1, 0.01).onChange((val) => {
+  material.attenuationDistance = val;
+  });
 
   const postprocessing = gui.addFolder("Post Processing");
 
@@ -278,19 +278,23 @@ loader.load('/src/gs.glb', function (gltf) {
   postprocessing.add(options, "bloomRadius", 0, 1, 0.01).onChange((val) => {
     bloomPass.radius = val;
   });
-  **/ 
+
   // Update
   // ------
+
   const update = (time, deltaTime) => {
+
+
     if (options.enableSwoopingCamera) {
       camera.position.x = Math.sin((time / 10) * Math.PI * 2) * 2;
       camera.position.y = Math.cos((time / 10) * Math.PI * 2) * 2;
       camera.position.z = 4;
       camera.lookAt(scene.position);
+      
     }
   };
 
-    // Lifecycle
+  // Lifecycle
   // ---------
 
   return {
@@ -314,11 +318,12 @@ loader.load('/src/gs.glb', function (gltf) {
       camera.updateProjectionMatrix();
     },
     render({ time, deltaTime }) {
-      // stats.begin();
+      stats.begin();
       controls.update();
       update(time, deltaTime);
+      // renderer.render(scene, camera);
       composer.render();
-      // stats.end();
+      stats.end();
     },
     unload() {
       mesh.geometry.dispose();
@@ -327,8 +332,8 @@ loader.load('/src/gs.glb', function (gltf) {
       controls.dispose();
       renderer.dispose();
       bloomPass.dispose();
-      // gui.destroy();
-      // document.body.removeChild(stats.dom);
+      gui.destroy();
+      document.body.removeChild(stats.dom);
     },
   };
 };
