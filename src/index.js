@@ -257,13 +257,6 @@ loader.load('/src/gs.glb', function (gltf) {
     normalMapTexture.repeat.set(val, val);
   });
 
-  gui.addColor(options, "attenuationTint").onChange((val) => {
-  material.attenuationTint.set(val);
-  });
-
-  gui.add(options, "attenuationDistance", 0, 1, 0.01).onChange((val) => {
-  material.attenuationDistance = val;
-  });
 
   const postprocessing = gui.addFolder("Post Processing");
 
