@@ -94,7 +94,7 @@ const sketch = ({ context, canvas, width, height }) => {
   const textureLoader = new THREE.TextureLoader();
 
   const hdrEquirect = new THREE.RGBELoader().load(
-    "src/hdr.hdr",
+    "src/hdr2.hdr",
     () => {
       hdrEquirect.mapping = THREE.EquirectangularReflectionMapping;
     }
